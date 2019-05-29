@@ -8,6 +8,8 @@ var router = express.Router();
 var User = require("../models/user");
 var Book = require("../models/book");
 
+var nHV = require('../neural/HighVelocity')
+
 router.post('/signup', function(req, res) {
   if (!req.body.username || !req.body.password) {
     res.json({success: false, msg: 'Please pass username and password.'});
@@ -103,5 +105,18 @@ getToken = function (headers) {
     return null;
   }
 };
+
+router.get('/event/nHV/:speed',function(req,res){
+  let speed = req.params.speed;
+
+  let result = nHV(speed);
+
+  if (!result) {
+    res.status(501).send({success: false, msg: 'No event found'});
+  }else{
+    res.json(result);
+  }
+
+})
 
 module.exports = router;
